@@ -1,4 +1,5 @@
-// Import the content of the home page
+"use client";
+// Import the content of the products
 import HomePageContent from "@/components/home-page/HomePageContent";
 import Guard from "@/components/layout/Gaurd";
 

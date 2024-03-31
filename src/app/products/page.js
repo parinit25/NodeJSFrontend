@@ -1,9 +1,13 @@
-import React from 'react'
+"use client";
+import Guard from "@/components/layout/Gaurd";
+import AllProducts from "@/components/products/AllProducts";
 
-const page = () => {
+const ProductsMainPage = () => {
   return (
-    <div>page</div>
-  )
-}
+    <Guard>
+      <AllProducts />
+    </Guard>
+  );
+};
 
-export default page
+export default ProductsMainPage;

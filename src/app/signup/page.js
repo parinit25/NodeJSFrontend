@@ -1,3 +1,4 @@
+"use client"
 import React from "react";
 import { Container, Grid, Typography, TextField, Button } from "@mui/material";
 import Image from "next/image";
