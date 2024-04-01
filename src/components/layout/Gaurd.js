@@ -26,6 +26,7 @@ const Guard = ({ children, dynamicId = "" }) => {
           "/home",
           "/products",
           `/products/${dynamicId}`,
+          '/add-product'
         ],
         user: ["/dashboard", "/profile", `/products/${dynamicId}`],
         guest: ["/login", "/signup"],

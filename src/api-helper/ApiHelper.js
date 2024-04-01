@@ -8,6 +8,10 @@ class APIHelper {
     if (!APIHelper.instance) {
       this.apiClient = axios.create({
         baseURL: "http://localhost:3000",
+        headers:{
+          "Accept": "*/*",
+          "Content-Type":"application/json"
+        }
       });
       APIHelper.instance = this;
     }
@@ -27,8 +31,9 @@ class APIHelper {
 
   async post(url, data) {
     try {
+      console.log(data,"data")
       const response = await this.apiClient.post(url, data);
-      return response.data;
+      return response;
     } catch (error) {
       console.error("Error posting data:", error);
       throw error;

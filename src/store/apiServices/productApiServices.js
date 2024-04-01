@@ -26,6 +26,15 @@ class ProductApiService {
       throw error;
     }
   };
+  addProduct = async (product) => {
+    try {
+      const response = await apiHelper.post(`/admin/add-product`, product);
+      return response;
+    } catch (error) {
+      console.error("Error fetching products:", error);
+      throw error;
+    }
+  };
 }
 
 export const productApiService = ProductApiService.getInstance();
