@@ -1,6 +1,6 @@
 "use client";
 import Guard from "@/components/layout/Gaurd";
-import AllProducts from "@/components/products/AllProducts";
+import { AllProducts } from "@/components/products/AllProducts";
 
 const ProductsMainPage = () => {
   return (

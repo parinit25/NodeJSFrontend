@@ -18,3 +18,15 @@ export const getAllProductsAction = createAsyncThunk(
     }
   }
 );
+export const getProductAction = createAsyncThunk(
+  "getProductAction",
+  async (prodId) => {
+    try {
+      const response = await productApiService.getProduct(prodId);
+      return response;
+    } catch (error) {
+      console.error("Error fetching product:", error);
+      throw error;
+    }
+  }
+);
