@@ -1,109 +1,166 @@
 "use client";
-import { Button, Container, Grid, TextField, Typography } from "@mui/material";
-import Image from "next/image";
+import * as React from "react";
+import Avatar from "@mui/material/Avatar";
+import Button from "@mui/material/Button";
+import CssBaseline from "@mui/material/CssBaseline";
+import TextField from "@mui/material/TextField";
+import FormControlLabel from "@mui/material/FormControlLabel";
+import Checkbox from "@mui/material/Checkbox";
+import Link from "@mui/material/Link";
+import Paper from "@mui/material/Paper";
+import Box from "@mui/material/Box";
+import Grid from "@mui/material/Grid";
+import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
+import Typography from "@mui/material/Typography";
+import { createTheme, ThemeProvider } from "@mui/material/styles";
+import { useForm } from "react-hook-form";
+import * as yup from "yup";
+import { yupResolver } from "@hookform/resolvers/yup"; // Update import
 import { useRouter } from "next/navigation";
-// Import useAuth hook from your authentication context
 
-const LoginPage = () => {
-  // const { login } = useAuth(); // Access the login function from the useAuth hook
+export default function SignIn() {
   const router = useRouter();
-  const handleLogin = async (event) => {
-    const user = {
-      id: 2,
-      email: "admin@example.com",
-      password: "admin123",
-      name: "Admin User",
-      role: "admin",
+  const schema = yup.object().shape({
+    email: yup.string().email().required(),
+    password: yup
+      .string()
+      .required("Password is required")
+      .min(8, "Password must be at least 8 characters long")
+      .matches(
+        /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*()])[A-Za-z\d!@#$%^&*()]{8,}$/,
+        "Password must contain at least one uppercase letter, one lowercase letter, one number, and one special character"
+      ),
+  });
+
+  const {
+    register,
+    handleSubmit,
+    reset,
+    formState: { errors },
+  } = useForm({
+    resolver: yupResolver(schema), // Use yupResolver with the schema
+  });
+
+  const onSubmit = async (data) => {
+    console.log(data);
+    const handleLogin = async () => {
+      const user = {
+        id: 2,
+        email: "admin@example.com",
+        password: "admin123",
+        name: "Admin User",
+        role: "admin",
+      };
+
+      const email = event.target.email.value;
+      const password = event.target.password.value;
+      // const success = await login(email, password);
+      if (email && password) {
+        localStorage.setItem("user", JSON.stringify(user));
+        router.push("/home");
+      } else {
+        // Display error message
+      }
     };
-    event.preventDefault();
-    const email = event.target.email.value;
-    const password = event.target.password.value;
-    // const success = await login(email, password);
-    if (email && password) {
-      localStorage.setItem("user", JSON.stringify(user));
-      router.push("/home");
-    } else {
-      // Display error message
-    }
+    handleLogin();
   };
 
   return (
-    <Container
-      style={{
-        minHeight: "100vh",
-        display: "flex",
-        alignItems: "center",
-        justifyContent: "center",
-      }}
-    >
-      <Grid container justifyContent="center" spacing={3}>
-        {/* Left Image */}
+    <ThemeProvider theme={createTheme()}>
+      <Grid container component="main" sx={{ height: "100vh" }}>
+        <CssBaseline />
         <Grid
           item
-          xs={12}
-          md={6}
-          style={{
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "center",
+          xs={false}
+          sm={4}
+          md={7}
+          sx={{
+            backgroundImage:
+              "url(https://source.unsplash.com/random?wallpapers)",
+            backgroundRepeat: "no-repeat",
+            backgroundColor: (t) =>
+              t.palette.mode === "light"
+                ? t.palette.grey[50]
+                : t.palette.grey[900],
+            backgroundSize: "cover",
+            backgroundPosition: "center",
           }}
-        >
-          <div>
-            <Image
-              src="/login-image.jpg"
-              alt="Login Image"
-              width={400}
-              height={400}
-              style={{ maxWidth: "100%", height: "auto", borderRadius: "16px" }}
-            />
-          </div>
-        </Grid>
-
-        {/* Right Form */}
-        <Grid item xs={12} md={6}>
-          <div
-            style={{
-              backgroundColor: "#f0f0f0",
-              padding: "24px",
-              borderRadius: "16px",
-              boxShadow: "0px 4px 10px rgba(0, 0, 0, 0.1)",
+        />
+        <Grid item xs={12} sm={8} md={5} component={Paper} elevation={6} square>
+          <Box
+            sx={{
+              my: 8,
+              mx: 4,
+              display: "flex",
+              flexDirection: "column",
+              alignItems: "center",
             }}
           >
-            <Typography variant="h5" gutterBottom>
-              Login
+            <Avatar sx={{ m: 1, bgcolor: "secondary.main" }}>
+              <LockOutlinedIcon />
+            </Avatar>
+            <Typography component="h1" variant="h5">
+              SignIn
             </Typography>
-            <form onSubmit={handleLogin}>
-              {/* Added onSubmit handler for form submission */}
+            <Box
+              component="form"
+              noValidate
+              onSubmit={handleSubmit(onSubmit)}
+              sx={{ mt: 1 }}
+            >
               <TextField
-                style={{ marginBottom: "16px" }}
-                name="email"
-                label="Email"
-                variant="outlined"
+                margin="normal"
+                required
                 fullWidth
-                type="email"
+                id="email"
+                label="Email Address"
+                autoComplete="email"
+                autoFocus
+                {...register("email")}
+                error={errors.email ? true : false}
+                helperText={errors.email ? errors.email.message : ""}
               />
               <TextField
-                style={{ marginBottom: "16px" }}
+                margin="normal"
+                required
+                fullWidth
                 name="password"
                 label="Password"
-                variant="outlined"
-                fullWidth
                 type="password"
+                id="password"
+                autoComplete="current-password"
+                {...register("password")}
+                error={errors.password ? true : false}
+                helperText={errors.password ? errors.password.message : ""}
+              />
+              <FormControlLabel
+                control={<Checkbox value="remember" color="primary" />}
+                label="Remember me"
               />
               <Button
                 type="submit"
-                variant="contained"
-                color="primary"
                 fullWidth
+                variant="contained"
+                sx={{ mt: 3, mb: 2 }}
               >
-                Login
+                Sign In
               </Button>
-            </form>
-          </div>
+              <Grid container>
+                <Grid item xs>
+                  <Link href="#" variant="body2">
+                    Forgot password?
+                  </Link>
+                </Grid>
+                <Grid item>
+                  <Link href="/signup" variant="body2">
+                    {"Don't have an account? Sign Up"}
+                  </Link>
+                </Grid>
+              </Grid>
+            </Box>
+          </Box>
         </Grid>
       </Grid>
-    </Container>
+    </ThemeProvider>
   );
-};
-
-export default LoginPage;
+}
